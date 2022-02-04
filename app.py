@@ -1,4 +1,4 @@
-from time import time
+import time
 import requests
 import constants
 import dotenv
@@ -55,7 +55,7 @@ def main():
 
     while True: 
         scrape(db, tg)
-        time.sleep(ENV["REQ_DELAY"])
+        time.sleep(int(ENV["REQ_DELAY"]))
    
 
 if __name__ == "__main__":
