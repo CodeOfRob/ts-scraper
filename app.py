@@ -1,3 +1,4 @@
+from time import time
 import requests
 import constants
 import dotenv
@@ -52,11 +53,10 @@ def main():
     db = DBService(ENV["DB_URI"])
     tg = TelegramService(ENV["TELEGRAM_API_KEY"], ENV["CHAT_ID"])
 
-    # while True: 
-    #     scrape()
-    #     time.sleep(60*60)
+    while True: 
+        scrape(db, tg)
+        time.sleep(ENV["REQ_DELAY"])
    
-    scrape(db, tg)
 
 if __name__ == "__main__":
     main()
