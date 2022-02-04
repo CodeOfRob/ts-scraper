@@ -2,6 +2,8 @@ import re
 import requests
 import re
 
+from telegram.telegram import TelegramService
+
 
 def extract_tags(wrapped_tags: list) -> list:
     return [element["tag"] for element in wrapped_tags]
@@ -18,11 +20,15 @@ def clean_str(str:str) -> str:
 
 
 
-def fetch_content(details_url: str) -> str:
+def fetch_content(details_url: str, tg: TelegramService) -> str:
 
     print(f"fetching: {details_url}", end="")
 
-    res = requests.get(details_url)
+    try:
+        res = requests.get(details_url)
+    except Exception as e:
+        tg.send_msg("Error while fetching details")
+        print(e)
 
     if not res.ok:
         return "error while fetching content"

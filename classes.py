@@ -1,4 +1,5 @@
 from datetime import datetime
+from telegram.telegram import TelegramService
 from util import extract_tags, fetch_content
 
 class Article:
@@ -17,5 +18,5 @@ class Article:
         self.type           = article_obj["type"]
         self.content        = ""
 
-    def enrich_content(self):
-        self.content = fetch_content(self.details)
+    def enrich_content(self, tg: TelegramService):
+        self.content = fetch_content(self.details, tg)

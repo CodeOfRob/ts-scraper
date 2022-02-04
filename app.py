@@ -24,6 +24,8 @@ def scrape(db: DBService, tg: TelegramService):
     try:
         articles = fetch_articles()
     except Exception as e:
+        tg.send_msg("Error while fetching articles")
+        tg.send_msg(str(e))
         print(e)
 
     exist_count = 0
@@ -32,7 +34,7 @@ def scrape(db: DBService, tg: TelegramService):
     for article in articles:
         if not db.isExisting(article.id):
             print(f"fetching content: {article.title}")
-            article.enrich_content() # fetch content
+            article.enrich_content(tg) # fetch content
             db.push_article(article=article)
             new_count += 1
         else:
@@ -46,7 +48,7 @@ def scrape(db: DBService, tg: TelegramService):
 def main():
 
     ENV = dotenv.dotenv_values()
-    
+
     db = DBService(ENV["DB_URI"])
     tg = TelegramService(ENV["TELEGRAM_API_KEY"], ENV["CHAT_ID"])
 
