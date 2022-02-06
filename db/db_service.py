@@ -15,3 +15,6 @@ class DBService:
     def isExisting(self, article_id):
         article = self.articles.find_one({"id":article_id})
         return True if article else False
+
+    def count_articles(self) -> int:
+        return self.articles.count_documents({})

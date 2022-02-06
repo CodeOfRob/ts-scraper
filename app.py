@@ -56,6 +56,8 @@ def main():
     while True: 
         scrape(db, tg)
         time.sleep(int(ENV["REQ_DELAY"]))
+
+    # print(db.count_articles())
    
 
 if __name__ == "__main__":
