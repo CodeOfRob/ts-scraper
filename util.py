@@ -43,7 +43,6 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
         elif line["type"] == "quotation":
             content += line["quotation"]["text"]
         else:
-            print(line, "\n")
             content += line["value"]
 
         content += " "
