@@ -64,4 +64,6 @@ def get_keywords(text: str):
     numOfKeywords = int(word_count*0.03)
 
     custom_kw_extractor = yake.KeywordExtractor(lan=language, n=max_ngram_size, dedupLim=deduplication_thresold, dedupFunc=deduplication_algo, windowsSize=windowSize, top=numOfKeywords, features=None)
-    return custom_kw_extractor.extract_keywords(text)
+    extracted = custom_kw_extractor.extract_keywords(text)
+
+    return [{'content': keyword[0], 'relevance': keyword[1]} for keyword in extracted]

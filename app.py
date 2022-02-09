@@ -3,7 +3,7 @@ import requests
 import constants
 import dotenv
 from classes import Article
-from db.db_service import DBService
+from db.db import DBService
 from telegram.telegram import TelegramService
 
 

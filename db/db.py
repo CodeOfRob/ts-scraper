@@ -1,6 +1,6 @@
-from sqlite3 import Cursor
 import pymongo
 from classes import Article
+from sqlite3 import Cursor
 
 
 class DBService:
