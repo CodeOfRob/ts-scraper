@@ -8,6 +8,7 @@ requests = "*"
 pymongo = "*"
 python-dotenv = "*"
 pytelegrambotapi = "*"
+yake = "*"
 
 [dev-packages]
 

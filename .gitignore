@@ -7,3 +7,6 @@ debug/*
 Pipfile.lock
 
 .env
+
+*.twb
+*.twbr

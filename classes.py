@@ -1,6 +1,6 @@
 from datetime import datetime
 from telegram.telegram import TelegramService
-from util import extract_tags, fetch_content
+from util import extract_tags, fetch_content, get_keywords
 
 class Article:
 
@@ -17,6 +17,8 @@ class Article:
         self.brandingImage  = article_obj["brandingImage"]
         self.type           = article_obj["type"]
         self.content        = ""
+        self.keywords       = []
 
     def enrich_content(self, tg: TelegramService):
         self.content = fetch_content(self.details, tg)
+        self.keywords = get_keywords(self.content)

@@ -1,12 +1,12 @@
 import re
 import requests
-import re
-
+import yake
 from telegram.telegram import TelegramService
 
 
 def extract_tags(wrapped_tags: list) -> list:
     return [element["tag"] for element in wrapped_tags]
+
 
 def clean_str(str:str) -> str:
     
@@ -17,7 +17,6 @@ def clean_str(str:str) -> str:
     str = re.sub('\n+', '\n', str)  # clear double newlines
     
     return str
-
 
 
 def fetch_content(details_url: str, tg: TelegramService) -> str:
@@ -35,7 +34,7 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
 
     content_array = res.json()["content"]
 
-    type_blacklist = ["image_gallery", "box", "video", "audio"]
+    type_blacklist = ["image_gallery", "box", "video", "audio", "related"]
     content = ""
 
     for line in content_array:
@@ -44,6 +43,7 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
         elif line["type"] == "quotation":
             content += line["quotation"]["text"]
         else:
+            print(line, "\n")
             content += line["value"]
 
         content += " "
@@ -52,3 +52,17 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
 
     print("...done")
     return content
+
+
+def get_keywords(text: str):
+      
+    language = "de"
+    max_ngram_size = 1
+    deduplication_thresold = 0.9
+    deduplication_algo = 'seqm'
+    windowSize = 1
+    word_count = len(text.split())
+    numOfKeywords = int(word_count*0.03)
+
+    custom_kw_extractor = yake.KeywordExtractor(lan=language, n=max_ngram_size, dedupLim=deduplication_thresold, dedupFunc=deduplication_algo, windowsSize=windowSize, top=numOfKeywords, features=None)
+    return custom_kw_extractor.extract_keywords(text)

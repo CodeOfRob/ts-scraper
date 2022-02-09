@@ -1,3 +1,4 @@
+from sqlite3 import Cursor
 import pymongo
 from classes import Article
 
@@ -18,3 +19,9 @@ class DBService:
 
     def count_articles(self) -> int:
         return self.articles.count_documents({})
+
+    def get_all_articles(self) -> Cursor:
+        return self.articles.find({})
+
+    def update_article(self, article_id: str, updated_fields: object):
+        return self.articles.update_one({"_id": article_id}, {"$set": updated_fields})
