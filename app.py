@@ -54,7 +54,12 @@ def main():
     tg = TelegramService(ENV["TELEGRAM_API_KEY"], ENV["CHAT_ID"])
 
     while True: 
-        scrape(db, tg)
+        try:
+            scrape(db, tg)
+        except Exception as e:
+            print(e)
+            tg.send_msg("Error")
+            tg.send_msg(str(e))
         time.sleep(int(ENV["REQ_DELAY"]))
 
     # print(db.count_articles())
