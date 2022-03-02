@@ -34,7 +34,7 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
 
     content_array = res.json()["content"]
 
-    type_blacklist = ["image_gallery", "box", "video", "audio", "related"]
+    type_blacklist = ["image_gallery", "box", "video", "audio", "related", "webview"]
     content = ""
 
     for line in content_array:
