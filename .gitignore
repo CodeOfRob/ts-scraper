@@ -4,8 +4,6 @@ __pycache__/*
 
 debug/*
 
-Pipfile.lock
-
 .env
 
 *.bat
