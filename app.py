@@ -48,6 +48,8 @@ def scrape(db: DBService, tg: TelegramService):
 
 def main():
 
+    print("script startet")
+
     ENV = dotenv.dotenv_values()
 
     db = DBService(ENV["DB_URI"])
