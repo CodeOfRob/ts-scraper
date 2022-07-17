@@ -1,7 +1,7 @@
 import re
 import requests
 import yake
-from telegram.telegram import TelegramService
+from .telegram.telegram import TelegramService
 
 
 def extract_tags(wrapped_tags: list) -> list:
@@ -21,8 +21,6 @@ def clean_str(str:str) -> str:
 
 def fetch_content(details_url: str, tg: TelegramService) -> str:
 
-    print(f"fetching: {details_url}", end="")
-
     try:
         res = requests.get(details_url)
     except Exception as e:
@@ -32,7 +30,12 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
     if not res.ok:
         return "error while fetching content"
 
-    content_array = res.json()["content"]
+    try:
+        content_array = res.json()["content"]
+    except Exception as e:
+        tg.send_msg(f"Skipping {details_url} bc no content")
+        print("Skipping",details_url, "bc no content")
+        return
 
     type_blacklist = ["image_gallery", "box", "video", "audio", "related", "webview"]
     content = ""
@@ -49,11 +52,12 @@ def fetch_content(details_url: str, tg: TelegramService) -> str:
 
     content = clean_str(content)
 
-    print("...done")
     return content
 
 
 def get_keywords(text: str):
+
+    if not text: return
       
     language = "de"
     max_ngram_size = 1

@@ -1,9 +1,4 @@
-FROM python:3.10 AS base
-
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
-
-FROM base AS python-deps
+FROM python:3.10-slim
 
 RUN pip install pipenv
 
@@ -11,15 +6,8 @@ COPY Pipfile .
 COPY Pipfile.lock .
 RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
-FROM base AS runtime
-
-COPY --from=python-deps /.venv /.venv
-ENV PATH="/.venv/bin:$PATH"
-
-RUN useradd --create-home appuser
-WORKDIR /home/appuser
-USER appuser
+ENV PATH="/.venv/bin:${PATH}"
 
 COPY . .
 
-ENTRYPOINT ["python", "crontab.py"]
+CMD ["python", "crontab.py"]
