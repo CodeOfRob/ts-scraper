@@ -3,9 +3,7 @@ __pycache__/*
 */__pycache__/*
 
 debug/*
+analyse/*
+.vscode/*
 
 .env
-
-*.bat
-*.twb
-*.twbr
