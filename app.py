@@ -1,32 +1,32 @@
-import requests
-import dotenv
-import pymongo
-
 from datetime import datetime
 from sqlite3 import Cursor
+
+import dotenv
+import pymongo
+import requests
 
 from src.telegram.telegram import TelegramService
 from src.util import extract_tags, fetch_content, get_keywords
 
-
 BASE_URL = "https://www.tagesschau.de/api2"
 NEWS_PATH = "/news"
 
+
 class Article:
     def __init__(self, article_obj: object):
-        self.id             = article_obj["externalId"]
-        self.title          = article_obj["title"]
-        self.date           = datetime.fromisoformat(article_obj["date"])
-        self.tracking       = article_obj["tracking"]
-        self.tags           = extract_tags(article_obj["tags"])
-        self.regionIds      = article_obj["regionIds"]
-        self.details        = article_obj["details"]
-        self.topline        = article_obj["topline"]
-        self.geotags        = extract_tags(article_obj["geotags"])
-        self.brandingImage  = article_obj["brandingImage"]
-        self.type           = article_obj["type"]
-        self.content        = ""
-        self.keywords       = []
+        self.id = article_obj["externalId"]
+        self.title = article_obj["title"]
+        self.date = datetime.fromisoformat(article_obj["date"])
+        self.tracking = article_obj["tracking"]
+        self.tags = extract_tags(article_obj["tags"])
+        self.regionIds = article_obj["regionIds"]
+        self.details = article_obj["details"]
+        self.topline = article_obj["topline"]
+        self.geotags = extract_tags(article_obj["geotags"])
+        self.brandingImage = article_obj["brandingImage"]
+        self.type = article_obj["type"]
+        self.content = ""
+        self.keywords = []
 
     def enrich_content(self, tg: TelegramService):
         self.content = fetch_content(self.details, tg)
@@ -43,7 +43,7 @@ class DBService:
         self.articles.insert_one(article.__dict__)
 
     def isExisting(self, article_id):
-        article = self.articles.find_one({"id":article_id})
+        article = self.articles.find_one({"id": article_id})
         return True if article else False
 
     def count_articles(self) -> int:
@@ -54,8 +54,6 @@ class DBService:
 
     def update_article(self, article_id: str, updated_fields: object):
         return self.articles.update_one({"_id": article_id}, {"$set": updated_fields})
-
-
 
 
 def fetch_articles():
@@ -83,7 +81,7 @@ def scrape(db: DBService, tg: TelegramService):
     for article in articles:
         if not db.isExisting(article.id):
             print(f"fetching content: {article.title}")
-            article.enrich_content(tg) # fetch content
+            article.enrich_content(tg)  # fetch content
             db.push_article(article=article)
             new_count += 1
         else:
@@ -93,6 +91,7 @@ def scrape(db: DBService, tg: TelegramService):
     msg = f"new entries: {new_count}, existing entries: {exist_count}"
     tg.send_msg(msg)
     print(msg)
+
 
 def main():
 
@@ -109,7 +108,7 @@ def main():
         print(e)
         tg.send_msg("Error")
         tg.send_msg(str(e))
-           
+
 
 if __name__ == "__main__":
     main()
