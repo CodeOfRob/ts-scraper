@@ -10,4 +10,4 @@ ENV PATH="/.venv/bin:${PATH}"
 
 COPY . .
 
-CMD ["python", "crontab.py"]
+CMD ["python", "app.py"]
