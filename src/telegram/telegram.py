@@ -1,7 +1,6 @@
 import telebot
 
 
-
 class TelegramService:
     def __init__(self, api_key, chat_id):
         self.chat_id = chat_id
